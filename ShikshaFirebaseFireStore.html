@@ -8,7 +8,6 @@
     Ashutosh
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
-        //import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
         import { getFirestore, collection, getDocs, doc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js';
 
         const firebaseConfig = {
@@ -29,14 +28,14 @@
                                             --> LastName(Dwivedi)
                                 Document(2) --> FistName(Shiksha)
                                             --> LastName(Mishra)
-                                Document(3) --> FistName(Shiksha)
+                                Document(3) --> FistName(Shi)
                                             --> LastName(Dwivedi)
         */
         /*Below function describe how to get whole data from cloud firestore
         INPUT : DB name eg db as describe above
         OUTPUT : List of Disctionary (JSON format) of data 
         eg [{LastName: 'Dwivedi', FirstName: 'Ashutosh'},{LastName: 'Mishra', FirstName: 'Shiksha'},
-        {LastName: 'Dwivedi', FirstName: 'Shiksha'}
+        {LastName: 'Dwivedi', FirstName: 'Shi'}
         ].
         */
         async function getName(dbs) {
@@ -79,7 +78,7 @@
             // });
             return querySnapshot.docs.map(doc => doc.data());
         }
-        console.log(getMultiDocumentFromCollection(db));
+        //console.log(getMultiDocumentFromCollection(db));
 
     </script>
 </body>
