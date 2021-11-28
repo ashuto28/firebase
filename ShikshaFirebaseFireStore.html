@@ -1,0 +1,87 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    Ashutosh
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
+        //import {getFirestore} from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js';
+        import { getFirestore, collection, getDocs, doc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: ####,
+            authDomain: ####,
+            projectId: ####,
+            storageBucket: ####,
+            messagingSenderId: ####,
+            appId: ####,
+            measurementId: ####
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        /*
+        Structure of data in firestore
+        Collection (test) ----> Document(1) --> FirstName(Ashutosh)
+                                            --> LastName(Dwivedi)
+                                Document(2) --> FistName(Shiksha)
+                                            --> LastName(Mishra)
+                                Document(3) --> FistName(Shiksha)
+                                            --> LastName(Dwivedi)
+        */
+        /*Below function describe how to get whole data from cloud firestore
+        INPUT : DB name eg db as describe above
+        OUTPUT : List of Disctionary (JSON format) of data 
+        eg [{LastName: 'Dwivedi', FirstName: 'Ashutosh'},{LastName: 'Mishra', FirstName: 'Shiksha'},
+        {LastName: 'Dwivedi', FirstName: 'Shiksha'}
+        ].
+        */
+        async function getName(dbs) {
+            const docId = collection(db, 'test');
+            const usersSnapshot = await getDocs(docId);
+            const userLists = usersSnapshot.docs.map(doc => doc.data());
+            return userLists;
+        }
+        //console.log(getName(db)) // Eg to call getCities(dbs)
+
+
+        //Get single dcument from collection
+        /*
+        INPUT : DB name eg db , docId eg '1'
+        OUTPUT : Disctionary of data
+        eg {LastName: 'Dwivedi', FirstName: 'Ashutosh'}.
+        */
+        async function getSingleDocumentFromCollection(dbs, docId) {
+            const docRef = doc(dbs, "test", docId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                return docSnap.data();
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+                return null;
+            }
+        }
+        //console.log(getSingleDocumentFromCollection(db,'1')) //Note doc id should be string
+
+
+        //Get multiple document from collection
+        async function getMultiDocumentFromCollection(dbs) {
+            const q = query(collection(db, "test"), where("LastName", "==", "Dwivedi"));
+
+            const querySnapshot = await getDocs(q);
+            // querySnapshot.forEach((doc) => {
+            //     // doc.data() is never undefined for query doc snapshots
+            //     //console.log(doc.id, " => ", doc.data());
+            // });
+            return querySnapshot.docs.map(doc => doc.data());
+        }
+        console.log(getMultiDocumentFromCollection(db));
+
+    </script>
+</body>
+
+</html>
